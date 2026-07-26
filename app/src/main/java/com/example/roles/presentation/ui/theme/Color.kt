@@ -1,4 +1,4 @@
-package com.example.roles.ui.theme
+package com.example.roles.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

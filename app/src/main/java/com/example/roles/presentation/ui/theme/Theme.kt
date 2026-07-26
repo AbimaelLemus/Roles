@@ -1,4 +1,4 @@
-package com.example.roles.ui.theme
+package com.example.roles.presentation.ui.theme
 
 import android.app.Activity
 import android.os.Build
