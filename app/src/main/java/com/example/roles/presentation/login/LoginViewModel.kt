@@ -57,9 +57,8 @@ class LoginViewModel : ViewModel() {
 
             result
                 .onSuccess {
-                    // Aquí navegaremos más adelante
                     _uiState.value = _uiState.value.copy(
-                        error = "Bienvenido"
+                        isLoggedIn = true
                     )
                 }
                 .onFailure {
