@@ -3,6 +3,7 @@ package com.example.roles.presentation.login
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.roles.data.repository.AuthRepositoryImpl
+import com.example.roles.data.session.SessionManager
 import com.example.roles.domain.usecase.LoginUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -36,7 +37,8 @@ class LoginViewModel : ViewModel() {
 
         if (username.isBlank() || password.isBlank()) {
             _uiState.value = _uiState.value.copy(
-                error = "Usuario y contraseña son obligatorios." )
+                error = "Usuario y contraseña son obligatorios."
+            )
             return
         }
 
@@ -56,7 +58,8 @@ class LoginViewModel : ViewModel() {
             )
 
             result
-                .onSuccess {
+                .onSuccess { userSession ->
+                    SessionManager.currentSession = userSession
                     _uiState.value = _uiState.value.copy(
                         isLoggedIn = true
                     )
