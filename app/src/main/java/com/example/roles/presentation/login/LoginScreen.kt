@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.collectAsState
@@ -65,12 +67,25 @@ class LoginScreen : ComponentActivity() {
             mSpacer(32)
             Button(
                 onClick = {
-
+                    viewModel.login()
                 },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                enabled = !uiState.isLoading
             ) {
+                if (uiState.isLoading) {
+                    CircularProgressIndicator()
+                } else {
+                    Text("Iniciar sesión")
+                }
 
-                Text("Iniciar sesión")
+            }
+
+            uiState.error?.let {
+                mSpacer(16)
+                Text(
+                    text = it,
+                    color = MaterialTheme.colorScheme.error
+                )
 
             }
         }
