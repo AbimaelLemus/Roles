@@ -1,42 +1,29 @@
 package com.example.roles.data.repository
 
+import com.example.roles.data.remote.LoginRequestDto
+import com.example.roles.data.remote.api.RetrofitClient
 import com.example.roles.domain.model.Role
 import com.example.roles.domain.model.UserSession
 import com.example.roles.domain.repository.AuthRepository
 
 class AuthRepositoryImpl : AuthRepository {
+    private val api = RetrofitClient.authApi
+
     override suspend fun login(username: String, password: String): Result<UserSession> {
-        return when {
-
-            username == "operador" && password == "1234" -> {
-
-                Result.success(
-                    UserSession(
-                        token = "jwt_operador_fake",
-                        role = Role.OPERATOR
-                    )
+        return try {
+            val response = api.login(
+                LoginRequestDto(
+                    username, password
                 )
-
-            }
-
-            username == "supervisor" && password == "1234" -> {
-
-                Result.success(
-                    UserSession(
-                        token = "jwt_supervisor_fake",
-                        role = Role.SUPERVISOR
-                    )
+            )
+            Result.success(
+                UserSession(
+                    token = response.token,
+                    role = Role.OPERATOR
                 )
-
-            }
-
-            else -> {
-
-                Result.failure(
-                    Exception("Usuario o contraseña incorrectos.")
-                )
-
-            }
+            )
+        } catch (e: Exception) {
+            Result.failure(e)
         }
     }
 
