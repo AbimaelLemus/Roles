@@ -19,7 +19,10 @@ class AuthRepositoryImpl : AuthRepository {
             Result.success(
                 UserSession(
                     token = response.token,
-                    role = Role.OPERATOR
+                    role = when (response.role) {
+                        "SUPERVISOR" -> Role.SUPERVISOR
+                        else -> Role.OPERATOR
+                    }
                 )
             )
         } catch (e: Exception) {

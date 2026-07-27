@@ -7,6 +7,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.roles.presentation.login.LoginScreen
 import com.example.roles.presentation.login.LoginViewModel
 import com.example.roles.presentation.menu.MenuScreen
+import com.example.roles.presentation.menu.MenuViewModel
 
 @Composable
 fun AppNavigation() {
@@ -17,7 +18,7 @@ fun AppNavigation() {
             LoginScreen(navController, viewModel = LoginViewModel())
         }
         composable(Screen.Menu.route) {
-            MenuScreen()
+            MenuScreen(viewModel = MenuViewModel())
         }
     }
 
