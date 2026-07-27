@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -18,6 +19,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.roles.presentation.navigation.Screen
@@ -28,8 +30,8 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel) {
 
     LaunchedEffect(key1 = uiState.isLoggedIn) {
         if (uiState.isLoggedIn) {
-            navController.navigate(Screen.Menu.route){
-                popUpTo(Screen.Login.route){
+            navController.navigate(Screen.Menu.route) {
+                popUpTo(Screen.Login.route) {
                     inclusive = true
                 }
             }
@@ -43,8 +45,8 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Title()
-        mSpacer(16)
+        MyText()
+        MYSpacer(16)
         OutlinedTextField(
             value = uiState.username,
             onValueChange = viewModel::onUsernameChange,
@@ -54,7 +56,7 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel) {
             singleLine = true,
             modifier = Modifier.fillMaxWidth()
         )
-        mSpacer(16)
+        MYSpacer(16)
         OutlinedTextField(
             value = uiState.password,
             onValueChange = viewModel::onPasswordChange,
@@ -62,9 +64,12 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel) {
                 Text("Contraseña")
             },
             singleLine = true,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Password
+            )
         )
-        mSpacer(32)
+        MYSpacer(32)
         Button(
             onClick = {
                 viewModel.login()
@@ -81,7 +86,7 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel) {
         }
 
         uiState.error?.let {
-            mSpacer(16)
+            MYSpacer(16)
             Text(
                 text = it,
                 color = MaterialTheme.colorScheme.error
@@ -92,11 +97,11 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel) {
 }
 
 @Composable
-private fun mSpacer(spacer: Int) {
+private fun MYSpacer(spacer: Int) {
     Spacer(modifier = Modifier.height(spacer.dp))
 }
 
 @Composable
-fun Title() {
+fun MyText() {
     Text(text = "Iniciar sesión")
 }
