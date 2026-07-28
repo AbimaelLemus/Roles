@@ -4,16 +4,21 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import com.example.roles.di.AppContainer
 import com.example.roles.presentation.login.LoginScreen
 import com.example.roles.presentation.login.LoginViewModel
 import com.example.roles.presentation.navigation.AppNavigation
 
 class MainActivity : ComponentActivity() {
+    private lateinit var container: AppContainer
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        container = AppContainer(this)
         setContent {
-            AppNavigation()
+            AppNavigation(
+                container = container
+            )
         }
     }
 }
