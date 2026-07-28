@@ -14,6 +14,8 @@ import com.example.roles.presentation.records.addrecord.AddRecordScreen
 import com.example.roles.presentation.records.addrecord.AddRecordViewModel
 import com.example.roles.presentation.records.addrecord.AddRecordViewModelFactory
 import com.example.roles.presentation.records.localrecords.LocalRecordsScreen
+import com.example.roles.presentation.records.localrecords.LocalRecordsViewModel
+import com.example.roles.presentation.records.localrecords.LocalRecordsViewModelFactory
 import com.example.roles.presentation.records.remoterecords.RemoteRecordsScreen
 
 @Composable
@@ -38,7 +40,13 @@ fun AppNavigation(
             AddRecordScreen(viewModel = viewModel)
         }
         composable(Screen.LocalRecords.route) {
-            LocalRecordsScreen()
+
+            val viewModel: LocalRecordsViewModel = viewModel(
+                factory = LocalRecordsViewModelFactory(
+                    container.useCases
+                )
+            )
+            LocalRecordsScreen(viewModel = viewModel, )
         }
         composable(Screen.RemoteRecords.route) {
             RemoteRecordsScreen()
