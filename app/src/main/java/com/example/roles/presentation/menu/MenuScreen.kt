@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.roles.data.session.SessionManager
 import com.example.roles.domain.model.Role
 import com.example.roles.presentation.navigation.Screen
 
@@ -53,11 +54,7 @@ private fun CurrentSession(role: Role, navController: NavController) {
         MySpacer(32)
         if (role == Role.OPERATOR) {
             Button(onClick = {
-                navController.navigate(Screen.AddRecord.route) {
-                    popUpTo(Screen.Menu.route) {
-                        inclusive = true
-                    }
-                }
+                navController.navigate(Screen.AddRecord.route)
             }, modifier = Modifier.fillMaxWidth()) {
                 MyText(message = "Registrar persona")
             }
@@ -65,11 +62,7 @@ private fun CurrentSession(role: Role, navController: NavController) {
 
         MySpacer(8)
         Button(onClick = {
-            navController.navigate(Screen.LocalRecords.route) {
-                popUpTo(Screen.Menu.route) {
-                    inclusive = true
-                }
-            }
+            navController.navigate(Screen.LocalRecords.route)
         }, modifier = Modifier.fillMaxWidth()) {
             MyText(message = "Registros locales")
         }
@@ -77,14 +70,23 @@ private fun CurrentSession(role: Role, navController: NavController) {
         if (role == Role.OPERATOR) {
             MySpacer(8)
             Button(onClick = {
-                navController.navigate(Screen.RemoteRecords.route) {
-                    popUpTo(Screen.Menu.route) {
-                        inclusive = true
-                    }
-                }
+                navController.navigate(Screen.RemoteRecords.route)
             }, modifier = Modifier.fillMaxWidth()) {
                 MyText(message = "Registros remotos")
             }
+        }
+
+        MySpacer(spacer = 32)
+        Button(onClick = {
+            SessionManager.clearSession()
+            navController.navigate(Screen.Login.route) {
+                popUpTo(0){
+                    inclusive = true
+                }
+                launchSingleTop = true
+            }
+        }, modifier = Modifier.fillMaxWidth()) {
+            MyText(message = "Cerrar sesión")
         }
     }
 

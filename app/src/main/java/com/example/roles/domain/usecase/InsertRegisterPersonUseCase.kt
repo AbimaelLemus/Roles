@@ -2,11 +2,14 @@ package com.example.roles.domain.usecase
 
 import com.example.roles.domain.model.RegisterPerson
 import com.example.roles.domain.repository.RegisterPersonRepository
+import com.example.roles.domain.repository.RemoteRecordRepository
 
 class InsertRegisterPersonUseCase(
-    private val repository: RegisterPersonRepository
+    private val localRepository: RegisterPersonRepository,
+    private val remoteRepository: RemoteRecordRepository
 ) {
     suspend operator fun invoke(person: RegisterPerson) {
-        repository.insertPerson(person)
+        val remote = remoteRepository.createRecord(person)
+        localRepository.insertPerson(remote)
     }
 }

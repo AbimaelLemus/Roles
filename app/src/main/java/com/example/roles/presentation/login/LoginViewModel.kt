@@ -59,7 +59,7 @@ class LoginViewModel : ViewModel() {
 
             result
                 .onSuccess { userSession ->
-                    SessionManager.currentSession = userSession
+                    SessionManager.saveSession( userSession)
                     _uiState.value = _uiState.value.copy(
                         isLoggedIn = true
                     )

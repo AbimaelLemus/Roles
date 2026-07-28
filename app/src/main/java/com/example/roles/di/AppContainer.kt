@@ -59,7 +59,10 @@ class AppContainer(
     val useCases = UseCases(
 
         insertRegisterPerson =
-        InsertRegisterPersonUseCase(registerPersonRepository),
+        InsertRegisterPersonUseCase(
+            registerPersonRepository,
+            remoteRecordRepository
+        ),
 
         getRegisterPersons =
         GetRegisterPersonsUseCase(registerPersonRepository),
