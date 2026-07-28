@@ -5,6 +5,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.roles.data.session.SessionManager
 import com.example.roles.di.AppContainer
 import com.example.roles.presentation.login.LoginScreen
 import com.example.roles.presentation.login.LoginViewModel
@@ -26,7 +27,17 @@ fun AppNavigation(
 ) {
     val navController = rememberNavController()
 
-    NavHost(navController, startDestination = Screen.Login.route) {
+    val starDestinacion =
+        if (SessionManager.currentSession != null) {
+            Screen.Menu.route
+        } else {
+            Screen.Login.route
+        }
+
+    NavHost(
+        navController,
+        startDestination = starDestinacion
+    ) {
         composable(Screen.Login.route) {
             LoginScreen(navController = navController, viewModel = LoginViewModel())
         }
@@ -39,7 +50,7 @@ fun AppNavigation(
                     container.useCases
                 )
             )
-            AddRecordScreen(viewModel = viewModel)
+            AddRecordScreen(navController = navController, viewModel = viewModel)
         }
         composable(Screen.LocalRecords.route) {
 
@@ -48,7 +59,12 @@ fun AppNavigation(
                     container.useCases
                 )
             )
-            LocalRecordsScreen(viewModel = viewModel, true)
+
+            LocalRecordsScreen(
+                navController = navController,
+                viewModel = viewModel,
+                isSupervisor = SessionManager.isSupervisor
+            )
         }
         composable(Screen.RemoteRecords.route) {
             val viewModel: RemoteRecordsViewModel = viewModel(
@@ -56,7 +72,7 @@ fun AppNavigation(
                     container.useCases
                 )
             )
-            RemoteRecordsScreen(viewModel = viewModel)
+            RemoteRecordsScreen(navController = navController, viewModel = viewModel)
         }
     }
 

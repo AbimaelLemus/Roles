@@ -4,9 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import com.example.roles.data.session.SessionManager
 import com.example.roles.di.AppContainer
-import com.example.roles.presentation.login.LoginScreen
-import com.example.roles.presentation.login.LoginViewModel
 import com.example.roles.presentation.navigation.AppNavigation
 
 class MainActivity : ComponentActivity() {
@@ -14,6 +13,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        SessionManager.init(this)
         container = AppContainer(this)
         setContent {
             AppNavigation(
