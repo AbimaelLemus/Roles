@@ -6,13 +6,9 @@ import com.example.roles.domain.repository.RegisterPersonRepository
 class DeleteRegisterPersonUseCase(
     private val repository: RegisterPersonRepository
 ) {
-
     suspend operator fun invoke(
         registerPerson: RegisterPerson
     ) {
-
         repository.deletePerson(registerPerson)
-
     }
-
 }

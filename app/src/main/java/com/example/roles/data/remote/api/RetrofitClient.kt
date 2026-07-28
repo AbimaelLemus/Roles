@@ -1,6 +1,7 @@
 package com.example.roles.data.remote.api
 
 import com.example.roles.data.remote.AuthApi
+import com.example.roles.data.remote.RemoteApi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -18,15 +19,21 @@ object RetrofitClient {
         .addInterceptor(interceptor)
         .build()
 
-    val authApi: AuthApi by lazy {
-
+    val retrofit by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(AuthApi::class.java)
 
+    }
+
+    val authApi: AuthApi by lazy {
+        retrofit.create(AuthApi::class.java)
+    }
+
+    val remoteApi: RemoteApi by lazy {
+        retrofit.create(RemoteApi::class.java)
     }
 
 }

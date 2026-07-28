@@ -39,6 +39,25 @@ class LocalRecordsViewModel(
     fun deletePerson(person: RegisterPerson) {
         viewModelScope.launch {
             useCases.deleteRegisterPerson(person)
+            dismissDeleteDialog()
+        }
+    }
+
+    fun showDeleteDialog(
+        person: RegisterPerson
+    ) {
+        _uiState.update {
+            it.copy(
+                personToDelete = person
+            )
+        }
+    }
+
+    fun dismissDeleteDialog() {
+        _uiState.update {
+            it.copy(
+                personToDelete = null
+            )
         }
     }
 

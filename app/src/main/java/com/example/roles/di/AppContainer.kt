@@ -3,9 +3,12 @@ package com.example.roles.di
 import android.content.Context
 import androidx.room.Room
 import com.example.roles.data.local.AppDatabase
+import com.example.roles.data.remote.api.RetrofitClient
 import com.example.roles.data.repository.RegisterPersonRepositoryImpl
+import com.example.roles.data.repository.RemoteRecordRepositoryImpl
 import com.example.roles.domain.usecase.DeleteRegisterPersonUseCase
 import com.example.roles.domain.usecase.GetRegisterPersonsUseCase
+import com.example.roles.domain.usecase.GetRemotePersonsUseCase
 import com.example.roles.domain.usecase.InsertRegisterPersonUseCase
 import com.example.roles.domain.usecase.UseCases
 
@@ -41,6 +44,15 @@ class AppContainer(
         )
 
     /*
+    * REMOTE REPOSITORY
+    */
+
+    private val remoteRecordRepository =
+        RemoteRecordRepositoryImpl(
+            RetrofitClient.remoteApi
+        )
+
+    /*
      * USE CASES
      */
 
@@ -53,7 +65,10 @@ class AppContainer(
         GetRegisterPersonsUseCase(registerPersonRepository),
 
         deleteRegisterPerson =
-        DeleteRegisterPersonUseCase(registerPersonRepository)
+        DeleteRegisterPersonUseCase(registerPersonRepository),
+
+        getRemotePersons =
+        GetRemotePersonsUseCase(remoteRecordRepository)
 
     )
 
