@@ -14,7 +14,6 @@ import com.example.roles.presentation.menu.MenuScreen
 import com.example.roles.presentation.menu.MenuViewModel
 import com.example.roles.presentation.records.addrecord.AddRecordScreen
 import com.example.roles.presentation.records.addrecord.AddRecordViewModel
-import com.example.roles.presentation.records.addrecord.AddRecordViewModelFactory
 import com.example.roles.presentation.records.localrecords.LocalRecordsScreen
 import com.example.roles.presentation.records.localrecords.LocalRecordsViewModel
 import com.example.roles.presentation.records.localrecords.LocalRecordsViewModelFactory
@@ -47,11 +46,7 @@ fun AppNavigation(
             MenuScreen(navController = navController, viewModel = MenuViewModel())
         }
         composable(Screen.AddRecord.route) {
-            val viewModel: AddRecordViewModel = viewModel(
-                factory = AddRecordViewModelFactory(
-                    container.useCases
-                )
-            )
+            val viewModel: AddRecordViewModel = hiltViewModel()
             AddRecordScreen(navController = navController, viewModel = viewModel)
         }
         composable(Screen.LocalRecords.route) {

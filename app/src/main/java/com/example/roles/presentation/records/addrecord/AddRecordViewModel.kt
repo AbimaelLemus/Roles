@@ -3,15 +3,19 @@ package com.example.roles.presentation.records.addrecord
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.roles.domain.model.RegisterPerson
+import com.example.roles.domain.usecase.InsertRegisterPersonUseCase
 import com.example.roles.domain.usecase.UseCases
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class AddRecordViewModel(
-    private val useCases: UseCases
+@HiltViewModel
+class AddRecordViewModel @Inject constructor(
+    private val insertRegisterPersonUseCase: InsertRegisterPersonUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(AddRecordUiState())
     val uiState: StateFlow<AddRecordUiState> = _uiState.asStateFlow()
@@ -77,7 +81,7 @@ class AddRecordViewModel(
                     )
                 }
 
-                useCases.insertRegisterPerson(
+                insertRegisterPersonUseCase(
                     RegisterPerson(
                         name = state.name,
                         age = age!!,
