@@ -2,15 +2,17 @@ package com.example.roles.presentation.records.remoterecords
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.roles.domain.usecase.GetRemotePersonsUseCase
 import com.example.roles.domain.usecase.UseCases
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class RemoteRecordsViewModel(
-    private val useCases: UseCases
+class RemoteRecordsViewModel @Inject constructor(
+    private val getRemotePersons: GetRemotePersonsUseCase,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(RemoteRecordsUiState())
     val uiState: StateFlow<RemoteRecordsUiState> = _uiState.asStateFlow()
@@ -30,7 +32,7 @@ class RemoteRecordsViewModel(
                 )
             }
             try {
-                val persons = useCases.getRemotePersons()
+                val persons = getRemotePersons()
                 _uiState.update {
                     it.copy(
                         persons = persons,
