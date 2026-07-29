@@ -1,6 +1,7 @@
 package com.example.roles.presentation.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -39,7 +40,8 @@ fun AppNavigation(
         startDestination = starDestinacion
     ) {
         composable(Screen.Login.route) {
-            LoginScreen(navController = navController, viewModel = LoginViewModel())
+            val viewModel : LoginViewModel = hiltViewModel()
+            LoginScreen(navController = navController, viewModel = viewModel)
         }
         composable(Screen.Menu.route) {
             MenuScreen(navController = navController, viewModel = MenuViewModel())
