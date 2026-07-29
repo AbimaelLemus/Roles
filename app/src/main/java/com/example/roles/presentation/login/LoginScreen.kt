@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -20,7 +21,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.roles.presentation.navigation.Screen
@@ -46,7 +50,11 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        MyText()
+        Text(
+            text = "Login",
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.Bold
+        )
         MYSpacer(16)
         OutlinedTextField(
             value = uiState.username,
@@ -55,7 +63,8 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel) {
                 Text("Usuario")
             },
             singleLine = true,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center)
         )
         MYSpacer(16)
         OutlinedTextField(
@@ -68,7 +77,9 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel) {
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password
-            )
+            ),
+            visualTransformation = PasswordVisualTransformation(),
+            textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center)
         )
         MYSpacer(32)
         Button(
@@ -103,9 +114,4 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel) {
 @Composable
 private fun MYSpacer(spacer: Int) {
     Spacer(modifier = Modifier.height(spacer.dp))
-}
-
-@Composable
-fun MyText() {
-    Text(text = "Iniciar sesión")
 }

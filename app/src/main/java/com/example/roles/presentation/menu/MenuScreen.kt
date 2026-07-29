@@ -8,6 +8,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -35,7 +39,7 @@ fun MenuScreen(navController: NavController, viewModel: MenuViewModel) {
         }
 
         else -> {
-            //Regresar al login
+            Logout(navController)
         }
     }
 }
@@ -49,7 +53,7 @@ private fun CurrentSession(role: Role, navController: NavController) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        MyText(message = role.name)
+        CurrentSession()
 
         MySpacer(32)
         if (role == Role.OPERATOR) {
@@ -77,20 +81,56 @@ private fun CurrentSession(role: Role, navController: NavController) {
         }
 
         MySpacer(spacer = 32)
-        Button(onClick = {
-            SessionManager.clearSession()
-            navController.navigate(Screen.Login.route) {
-                popUpTo(0){
-                    inclusive = true
-                }
-                launchSingleTop = true
-            }
-        }, modifier = Modifier.fillMaxWidth()) {
+        OutlinedButton(
+            onClick = {
+                Logout(navController)
+            },
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+
             MyText(message = "Cerrar sesión")
         }
     }
 
 
+}
+
+@Composable
+fun CurrentSession() {
+    val session = SessionManager.currentSession
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 4.dp
+        )
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            MyText(message = "Bienvenido")
+            MySpacer(spacer = 32)
+            Text(
+                text = session?.username ?: "",
+                style = MaterialTheme.typography.titleLarge,
+            )
+            MyText(message = "Rol: ${session?.role?.name ?: ""}")
+        }
+
+
+    }
+}
+
+private fun Logout(navController: NavController) {
+    SessionManager.clearSession()
+    navController.navigate(Screen.Login.route) {
+        popUpTo(0) {
+            inclusive = true
+        }
+        launchSingleTop = true
+    }
 }
 
 @Composable

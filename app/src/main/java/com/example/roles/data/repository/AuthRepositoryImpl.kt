@@ -2,9 +2,9 @@ package com.example.roles.data.repository
 
 import com.example.roles.data.remote.LoginRequestDto
 import com.example.roles.data.remote.api.RetrofitClient
-import com.example.roles.domain.model.Role
 import com.example.roles.domain.model.UserSession
 import com.example.roles.domain.repository.AuthRepository
+import com.example.roles.utils.jwt.JwtUtils
 
 class AuthRepositoryImpl : AuthRepository {
     private val api = RetrofitClient.authApi
@@ -16,13 +16,12 @@ class AuthRepositoryImpl : AuthRepository {
                     username, password
                 )
             )
+
             Result.success(
                 UserSession(
                     token = response.token,
-                    role = when (response.role) {
-                        "SUPERVISOR" -> Role.SUPERVISOR
-                        else -> Role.OPERATOR
-                    }
+                    role = JwtUtils.getRole(response.token),
+                    username = username
                 )
             )
         } catch (e: Exception) {
