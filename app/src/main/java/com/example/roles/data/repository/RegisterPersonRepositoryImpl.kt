@@ -7,8 +7,9 @@ import com.example.roles.domain.model.RegisterPerson
 import com.example.roles.domain.repository.RegisterPersonRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class RegisterPersonRepositoryImpl(
+class RegisterPersonRepositoryImpl @Inject constructor(
     private val dao: RegisterPersonDao
 ) : RegisterPersonRepository {
     override suspend fun insertPerson(person: RegisterPerson) {
