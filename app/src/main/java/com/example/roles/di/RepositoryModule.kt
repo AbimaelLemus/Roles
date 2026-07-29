@@ -1,8 +1,10 @@
 package com.example.roles.di
 
 import com.example.roles.data.repository.AuthRepositoryImpl
+import com.example.roles.data.repository.RegisterPersonRepositoryImpl
 import com.example.roles.data.repository.RemoteRecordRepositoryImpl
 import com.example.roles.domain.repository.AuthRepository
+import com.example.roles.domain.repository.RegisterPersonRepository
 import com.example.roles.domain.repository.RemoteRecordRepository
 import dagger.Binds
 import dagger.Module
@@ -24,4 +26,10 @@ abstract class RepositoryModule {
     abstract fun bindRemoteRecordRepository(
         repository: RemoteRecordRepositoryImpl
     ): RemoteRecordRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindRegisterPersonRepository(
+        repository: RegisterPersonRepositoryImpl
+    ): RegisterPersonRepository
 }
