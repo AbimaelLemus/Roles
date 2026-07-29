@@ -1,8 +1,9 @@
 package com.example.roles.domain.usecase
 
 import com.example.roles.domain.repository.RegisterPersonRepository
+import javax.inject.Inject
 
-class GetRegisterPersonsUseCase(
+class GetRegisterPersonsUseCase@Inject constructor (
     private val repository: RegisterPersonRepository
 ) {
 
