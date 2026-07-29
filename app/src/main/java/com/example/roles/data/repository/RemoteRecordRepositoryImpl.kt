@@ -5,8 +5,9 @@ import com.example.roles.data.remote.RemoteApi
 import com.example.roles.data.remote.RemoteRecordDto
 import com.example.roles.domain.model.RegisterPerson
 import com.example.roles.domain.repository.RemoteRecordRepository
+import javax.inject.Inject
 
-class RemoteRecordRepositoryImpl(
+class RemoteRecordRepositoryImpl @Inject constructor(
     private val api: RemoteApi
 ) : RemoteRecordRepository {
     override suspend fun getPersons(): List<RegisterPerson> {
@@ -20,7 +21,7 @@ class RemoteRecordRepositoryImpl(
     override suspend fun createRecord(
         person: RegisterPerson
     ): RegisterPerson {
-        return  api.createPerson(
+        return api.createPerson(
             RemoteRecordDto(
                 id = person.id,
                 name = person.name,

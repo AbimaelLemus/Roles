@@ -2,10 +2,14 @@ package com.example.roles.domain.usecase
 
 import com.example.roles.domain.model.UserSession
 import com.example.roles.domain.repository.AuthRepository
+import javax.inject.Inject
 
-class LoginUseCase(private val authRepository: AuthRepository) {
+class LoginUseCase @Inject constructor(private val authRepository: AuthRepository) {
 
-    suspend operator fun invoke(username: String, password: String): Result<UserSession> {
-        return authRepository.login(username, password)
-    }
+    suspend operator fun invoke(
+        username: String,
+        password: String
+    ): Result<UserSession> =
+        authRepository.login(username, password)
+
 }
