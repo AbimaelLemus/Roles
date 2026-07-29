@@ -3,14 +3,18 @@ package com.example.roles.presentation.records.localrecords
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.roles.domain.model.RegisterPerson
+import com.example.roles.domain.usecase.DeleteRegisterPersonUseCase
+import com.example.roles.domain.usecase.GetRegisterPersonsUseCase
 import com.example.roles.domain.usecase.UseCases
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class LocalRecordsViewModel(
-    private val useCases: UseCases
+class LocalRecordsViewModel @Inject constructor(
+    private val getRegisterPersons: GetRegisterPersonsUseCase,
+    private val deleteRegisterPerson: DeleteRegisterPersonUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(LocalRecordsUiState())
@@ -23,8 +27,7 @@ class LocalRecordsViewModel(
 
     private fun loadRecords() {
         viewModelScope.launch {
-            useCases
-                .getRegisterPersons()
+            getRegisterPersons()
                 .collect { persons ->
 
                     _uiState.update {
@@ -38,7 +41,7 @@ class LocalRecordsViewModel(
 
     fun deletePerson(person: RegisterPerson) {
         viewModelScope.launch {
-            useCases.deleteRegisterPerson(person)
+            deleteRegisterPerson(person)
             dismissDeleteDialog()
         }
     }
