@@ -52,6 +52,7 @@ data
 - Jetpack Compose
 - MVVM
 - Clean Architecture
+- Inyección de dependencias
 - Navigation Compose
 - StateFlow
 - Coroutines
