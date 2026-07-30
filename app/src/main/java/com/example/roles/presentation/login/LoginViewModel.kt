@@ -13,7 +13,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val loginUseCase: LoginUseCase
+    private val loginUseCase: LoginUseCase,
+    private val sessionManager: SessionManager
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(LoginUiState())
     val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
@@ -61,7 +62,7 @@ class LoginViewModel @Inject constructor(
 
             result
                 .onSuccess { userSession ->
-                    SessionManager.saveSession( userSession)
+                    sessionManager.saveSession( userSession)
                     _uiState.value = _uiState.value.copy(
                         isLoggedIn = true
                     )

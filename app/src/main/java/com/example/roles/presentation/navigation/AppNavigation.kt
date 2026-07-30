@@ -2,12 +2,10 @@ package com.example.roles.presentation.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.roles.data.session.SessionManager
-import com.example.roles.di.AppContainer
 import com.example.roles.presentation.login.LoginScreen
 import com.example.roles.presentation.login.LoginViewModel
 import com.example.roles.presentation.menu.MenuScreen
@@ -21,12 +19,12 @@ import com.example.roles.presentation.records.remoterecords.RemoteRecordsViewMod
 
 @Composable
 fun AppNavigation(
-    container: AppContainer
+    sessionManager: SessionManager
 ) {
     val navController = rememberNavController()
 
     val starDestinacion =
-        if (SessionManager.currentSession != null) {
+        if (sessionManager.currentSession != null) {
             Screen.Menu.route
         } else {
             Screen.Login.route
@@ -41,20 +39,20 @@ fun AppNavigation(
             LoginScreen(navController = navController, viewModel = viewModel)
         }
         composable(Screen.Menu.route) {
-            MenuScreen(navController = navController, viewModel = MenuViewModel())
+            val viewModel: MenuViewModel = hiltViewModel()
+            MenuScreen(navController = navController, viewModel = viewModel)
         }
         composable(Screen.AddRecord.route) {
             val viewModel: AddRecordViewModel = hiltViewModel()
             AddRecordScreen(navController = navController, viewModel = viewModel)
         }
         composable(Screen.LocalRecords.route) {
-
             val viewModel: LocalRecordsViewModel = hiltViewModel()
 
             LocalRecordsScreen(
                 navController = navController,
                 viewModel = viewModel,
-                isSupervisor = SessionManager.isSupervisor
+                isSupervisor = sessionManager.isSupervisor
             )
         }
         composable(Screen.RemoteRecords.route) {
