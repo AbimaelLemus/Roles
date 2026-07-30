@@ -1,5 +1,6 @@
-package com.example.roles.data.remote
+package com.example.roles.data.remote.api
 
+import com.example.roles.data.remote.RemoteRecordDto
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST

@@ -1,27 +1,28 @@
 package com.example.roles.data.session
 
 import android.content.Context
-import android.content.SharedPreferences
 import com.example.roles.domain.model.Role
 import com.example.roles.domain.model.UserSession
 import com.google.gson.Gson
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
+import javax.inject.Singleton
 
-object SessionManager {
+@Singleton
+class SessionManager @Inject constructor(
+    @ApplicationContext context: Context
+) {
 
-    private const val PREF_NAME = "session_preferences"
-    private const val KEY_SESSION = "user_session"
-
-    private lateinit var preferences: SharedPreferences
+    private val preferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
 
     var currentSession: UserSession? = null
         private set
 
     val isSupervisor: Boolean
-        get() =currentSession?.role == Role.SUPERVISOR
+        get() = currentSession?.role == Role.SUPERVISOR
 
-    fun init(context: Context) {
-        preferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
-        loadSession()
+    fun init() {
+            loadSession()
     }
 
     fun saveSession(session: UserSession) {
@@ -40,5 +41,10 @@ object SessionManager {
         currentSession = json?.let {
             Gson().fromJson(it, UserSession::class.java)
         }
+    }
+
+    companion object{
+        private const val PREF_NAME = "session_preferences"
+        private const val KEY_SESSION = "user_session"
     }
 }

@@ -7,11 +7,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -20,7 +23,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.roles.data.session.SessionManager
 import com.example.roles.domain.model.Role
 import com.example.roles.presentation.navigation.Screen
 
@@ -31,73 +33,91 @@ fun MenuScreen(navController: NavController, viewModel: MenuViewModel) {
 
     when (uiState.role) {
         Role.SUPERVISOR -> {
-            CurrentSession(role = Role.SUPERVISOR, navController)
+            CurrentSession(
+                username = uiState.username,
+                role = Role.SUPERVISOR,
+                navController,
+                viewModel = viewModel
+            )
         }
 
         Role.OPERATOR -> {
-            CurrentSession(role = Role.OPERATOR, navController)
+            CurrentSession(
+                username = uiState.username,
+                role = Role.OPERATOR,
+                navController,
+                viewModel = viewModel
+            )
         }
 
         else -> {
+            viewModel.logout()
             Logout(navController)
         }
     }
 }
 
 @Composable
-private fun CurrentSession(role: Role, navController: NavController) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        CurrentSession()
+private fun CurrentSession(
+    username: String,
+    role: Role,
+    navController: NavController,
+    viewModel: MenuViewModel
+) {
+    Scaffold { padding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(padding)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CardSession(username, role)
 
-        MySpacer(32)
-        if (role == Role.OPERATOR) {
-            Button(onClick = {
-                navController.navigate(Screen.AddRecord.route)
-            }, modifier = Modifier.fillMaxWidth()) {
-                MyText(message = "Registrar persona")
+            MySpacer(32)
+            if (role == Role.OPERATOR) {
+                Button(onClick = {
+                    navController.navigate(Screen.AddRecord.route)
+                }, modifier = Modifier.fillMaxWidth()) {
+                    MyText(message = "Registrar persona")
+                }
             }
-        }
 
-        MySpacer(8)
-        Button(onClick = {
-            navController.navigate(Screen.LocalRecords.route)
-        }, modifier = Modifier.fillMaxWidth()) {
-            MyText(message = "Registros locales")
-        }
-
-        if (role == Role.OPERATOR) {
             MySpacer(8)
             Button(onClick = {
-                navController.navigate(Screen.RemoteRecords.route)
+                navController.navigate(Screen.LocalRecords.route)
             }, modifier = Modifier.fillMaxWidth()) {
-                MyText(message = "Registros remotos")
+                MyText(message = "Registros locales")
+            }
+
+            if (role == Role.OPERATOR) {
+                MySpacer(8)
+                Button(onClick = {
+                    navController.navigate(Screen.RemoteRecords.route)
+                }, modifier = Modifier.fillMaxWidth()) {
+                    MyText(message = "Registros remotos")
+                }
+            }
+
+            MySpacer(spacer = 32)
+            OutlinedButton(
+                onClick = {
+                    viewModel.logout()
+                    Logout(navController)
+                },
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+
+                MyText(message = "Cerrar sesión")
             }
         }
-
-        MySpacer(spacer = 32)
-        OutlinedButton(
-            onClick = {
-                Logout(navController)
-            },
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-
-            MyText(message = "Cerrar sesión")
-        }
     }
-
-
 }
 
 @Composable
-fun CurrentSession() {
-    val session = SessionManager.currentSession
+fun CardSession(username: String, role: Role) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(
@@ -113,10 +133,10 @@ fun CurrentSession() {
             MyText(message = "Bienvenido")
             MySpacer(spacer = 32)
             Text(
-                text = session?.username ?: "",
+                text = username ?: "",
                 style = MaterialTheme.typography.titleLarge,
             )
-            MyText(message = "Rol: ${session?.role?.name ?: ""}")
+            MyText(message = "Rol: ${role.name}")
         }
 
 
@@ -124,7 +144,6 @@ fun CurrentSession() {
 }
 
 private fun Logout(navController: NavController) {
-    SessionManager.clearSession()
     navController.navigate(Screen.Login.route) {
         popUpTo(0) {
             inclusive = true
