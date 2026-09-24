@@ -37,7 +37,8 @@ fun MenuScreen(navController: NavController, viewModel: MenuViewModel) {
                 username = uiState.username,
                 role = Role.SUPERVISOR,
                 navController,
-                viewModel = viewModel
+                viewModel = viewModel,
+                isVisibleCard = uiState.isVisibleCard
             )
         }
 
@@ -46,7 +47,8 @@ fun MenuScreen(navController: NavController, viewModel: MenuViewModel) {
                 username = uiState.username,
                 role = Role.OPERATOR,
                 navController,
-                viewModel = viewModel
+                viewModel = viewModel,
+                isVisibleCard = uiState.isVisibleCard
             )
         }
 
@@ -55,6 +57,7 @@ fun MenuScreen(navController: NavController, viewModel: MenuViewModel) {
             Logout(navController)
         }
     }
+
 }
 
 @Composable
@@ -62,7 +65,8 @@ private fun CurrentSession(
     username: String,
     role: Role,
     navController: NavController,
-    viewModel: MenuViewModel
+    viewModel: MenuViewModel,
+    isVisibleCard: Boolean
 ) {
     Scaffold { padding ->
         Column(
@@ -74,7 +78,7 @@ private fun CurrentSession(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            CardSession(username, role)
+            CardSession(username, role, isVisibleCard)
 
             MySpacer(32)
             if (role == Role.OPERATOR) {
@@ -104,8 +108,9 @@ private fun CurrentSession(
             MySpacer(spacer = 32)
             OutlinedButton(
                 onClick = {
-                    viewModel.logout()
-                    Logout(navController)
+                    /*viewModel.logout()
+                    Logout(navController)*/
+                    viewModel.mCard(false)
                 },
                 modifier = Modifier.fillMaxWidth(),
             ) {
@@ -117,29 +122,31 @@ private fun CurrentSession(
 }
 
 @Composable
-fun CardSession(username: String, role: Role) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 4.dp
-        )
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+fun CardSession(username: String, role: Role, isVisible: Boolean = true) {
+    if (isVisible) {
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            elevation = CardDefaults.cardElevation(
+                defaultElevation = 4.dp
+            ),
         ) {
-            MyText(message = "Bienvenido")
-            MySpacer(spacer = 32)
-            Text(
-                text = username ?: "",
-                style = MaterialTheme.typography.titleLarge,
-            )
-            MyText(message = "Rol: ${role.name}")
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                MyText(message = "Bienvenido")
+                MySpacer(spacer = 32)
+                Text(
+                    text = username ?: "",
+                    style = MaterialTheme.typography.titleLarge,
+                )
+                MyText(message = "Rol: ${role.name}")
+            }
+
+
         }
-
-
     }
 }
 

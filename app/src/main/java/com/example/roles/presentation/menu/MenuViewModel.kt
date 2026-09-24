@@ -22,4 +22,10 @@ class MenuViewModel @Inject constructor(
     fun logout() {
         sessionManager.clearSession()
     }
+
+    fun mCard(isVisibleCard: Boolean) {
+        _uiState.value = _uiState.value.copy(
+            isVisibleCard = isVisibleCard
+        )
+    }
 }
